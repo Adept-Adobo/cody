@@ -1,5 +1,8 @@
 const { Client } = require('pg');
-const client = new Client();
-module.exports.db = await client.connect();
+const login = require('../../env/config');
+const client = new Client(login);
+client.connect();
+
+module.exports = client;
 
 

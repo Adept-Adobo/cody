@@ -1,5 +1,5 @@
-const reviews = require('./controllers');
-const router = require('express').Router();
+const controller = require('./controllers');
+const router = require('express-promise-router')();
 
 router.route('/')
   .get((req, res, next) => {
@@ -8,16 +8,16 @@ router.route('/')
   });
 
 router.route('/reviews')
-  .get(reviews.get)
-  .post(reviews.post);
+  .get(controller.get)
+  .post(controller.post);
 
 router.route('/reviews/meta')
-  .get(reviews.getMeta);
+  .get(controller.getMeta);
 
 router.route('/reviews/:review_id/helpful')
-  .put(reviews.putHelpful);
+  .put(controller.putHelpful);
 
 router.route('/reviews/:review_id/report')
-  .put(reviews.putReport);
+  .put(controller.putReport);
 
 module.exports = router;

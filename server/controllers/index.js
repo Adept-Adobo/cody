@@ -1,9 +1,14 @@
 const models = require('../models');
 
 module.exports = {
-  get: (req, res) => {
+  get: async (req, res) => {
     console.log('GET review');
-    res.status(200).send();
+    try {
+      const data = await models.get();
+      res.status(200).send(data);
+    } catch(e) {
+      res.status(500).send('GET review ERROR: ', e);
+    }
   },
   post: (req, res) => {
     console.log('POST review');

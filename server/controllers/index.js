@@ -24,9 +24,15 @@ module.exports = {
     console.log('GET review meta');
     res.status(200).send();
   },
-  putHelpful: (req, res) => {
+  putHelpful: async (req, res) => {
     console.log('PUT helpful');
-    res.status(204).send();
+    const { review_id } = req.params;
+    try {
+      models.putHelpful(review_id);
+      res.status(204).send('Helpfulness update successful');
+    } catch(e) {
+      res.status(500).send('ERROR UPDATING HELPFUL', e);
+    }
   },
   putReport: (req, res) => {
     console.log('PUT report');

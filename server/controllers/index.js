@@ -36,6 +36,12 @@ module.exports = {
   },
   putReport: (req, res) => {
     console.log('PUT report');
-    res.status(204).send();
+    const { review_id } = req.params;
+    try {
+      models.putReport(review_id);
+      res.status(204).send('Report update successful');
+    } catch(e) {
+      res.status(500).send('ERROR UPDATING REPORT', e);
+    }
   },
 };

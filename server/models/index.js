@@ -9,8 +9,10 @@ module.exports = {
   getMeta: (query) => {
     const {product_id} = query;
   },
-  putHelpful: (query) => {
-    return db.query(`UPDATE reviews SET helpfulness = helpfulness + 1 WHERE id = ${query}`);
+  putHelpful: (review_id) => {
+    return db.query(`UPDATE reviews SET helpfulness = helpfulness + 1 WHERE id = ${review_id}`);
   },
-  putReport: () => {console.log('putReport)')},
+  putReport: (review_id) => {
+    return db.query(`UPDATE reviews SET reported = NOT reported WHERE id = ${review_id}`);
+  },
 };

@@ -16,24 +16,17 @@ module.exports = {
   },
   post: async (query) => {
     const {product_id, rating, summary, body, recommend, reported = false, response = null, helpfulness = 0, name, email, photos = [], characteristics} = query;
-    console.log(email, name);
     try {
       // get/create user id
       let id = await db.query(`SELECT id FROM users WHERE email = '${email}' AND name = '${name}'`);
       if (id.rows.length === 0) {
         id = await db.query(`INSERT INTO users(email, name) VALUES('${email}', '${name}') RETURNING id;`);
-        console.log('new user', id.rows);
-      } else {
-        console.log('old user', id.rows);
       }
       try {
         // post review and get review_id
-        console.log('trying to insert into review');
         const reviewColumns = `product_id, rating, posting_date, summary, body, recommend, reported, response, helpfulness, reviewer_id`;
         const reviewValues = `${product_id}, ${rating}, ${Date.now()}, '${summary}', '${body}', ${recommend}, ${reported}, ${response ? `${response}` : null}, ${helpfulness}, ${id.rows[0]['id']}`;
-        console.log(reviewValues);
         let review_id = await db.query(`INSERT INTO reviews(${reviewColumns}) VALUES(${reviewValues}) RETURNING id;`);
-        console.log('review id: ', review_id.rows);
         // insert photos to db if exists
         if (photos.length > 0) {
           let query = [];
@@ -42,7 +35,6 @@ module.exports = {
           }
           try {
             let formattedQuery = query.join(',');
-            console.log('photo query', formattedQuery);
             await db.query(`INSERT INTO photos(review_id, url) VALUES ${formattedQuery};`);
           } catch(e) {console.log('Error posting image URLs');}
         }
@@ -54,7 +46,6 @@ module.exports = {
           }
           try {
             let formattedQuery = query.join(',');
-            console.log('char query', formattedQuery);
             await db.query(`INSERT INTO characteristics(name, review_id, value) VALUES ${formattedQuery};`);
           } catch(e) {console.log('ERROR POSTING CHARACTERISTICS');}
         }

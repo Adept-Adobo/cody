@@ -16,29 +16,40 @@ module.exports = {
       res.status(400).send('Missing product_id parameter.');
     }
   },
-  post: (req, res) => {
+  post: async (req, res) => {
     console.log('POST review');
-    res.status(201).send();
+    try {
+      await models.post(req.body);
+      res.status(201).send('Review posted');
+    } catch(e) {
+      res.status(500).send('ERROR POSTING REVIEW');
+    }
   },
-  getMeta: (req, res) => {
+  getMeta: async (req, res) => {
     console.log('GET review meta');
-    res.status(200).send();
+    const { product_id } = req.query;
+    try {
+      const data = await models.getMeta(product_id);
+      res.status(200).send(data);
+    } catch(e) {
+      res.status(500).send('ERROR GETTING META DATA', e);
+    }
   },
   putHelpful: async (req, res) => {
     console.log('PUT helpful');
     const { review_id } = req.params;
     try {
-      models.putHelpful(review_id);
+      await models.putHelpful(review_id);
       res.status(204).send('Helpfulness update successful');
     } catch(e) {
       res.status(500).send('ERROR UPDATING HELPFUL', e);
     }
   },
-  putReport: (req, res) => {
+  putReport: async (req, res) => {
     console.log('PUT report');
     const { review_id } = req.params;
     try {
-      models.putReport(review_id);
+      await models.putReport(review_id);
       res.status(204).send('Report update successful');
     } catch(e) {
       res.status(500).send('ERROR UPDATING REPORT', e);

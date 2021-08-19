@@ -2,8 +2,14 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 
 export let options = {
-  vus: 1,
-  duration: '1s',
+  stages: [
+    { duration: '20s', target: 10 },
+    { duration: '30s', target: 200 },
+    { duration: '1m', target: 1000 },
+    { duration: '1m30s', target: 2000 },
+    { duration: '30s', target: 500 },
+    { duration: '10s', target: 100 },
+  ],
 };
 
 let count = 1;

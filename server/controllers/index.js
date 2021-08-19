@@ -2,7 +2,6 @@ const models = require('../models');
 
 module.exports = {
   get: async (req, res) => {
-    console.log('GET review');
     // { page=1, count=5, product_id, sort } = req.query;
     const {page = 1, count = 5, product_id, sort = 'newest'} = req.query;
     if (product_id) {
@@ -17,7 +16,6 @@ module.exports = {
     }
   },
   post: async (req, res) => {
-    console.log('POST review');
     try {
       const data = await models.post(req.body);
       typeof data === 'string' ? res.status(400).send(data) : res.status(201).send('Review posted');
@@ -26,7 +24,6 @@ module.exports = {
     }
   },
   getMeta: async (req, res) => {
-    console.log('GET review meta');
     const { product_id } = req.query;
     try {
       const data = await models.getMeta(product_id);
@@ -36,7 +33,6 @@ module.exports = {
     }
   },
   putHelpful: async (req, res) => {
-    console.log('PUT helpful');
     const { review_id } = req.params;
     try {
       await models.putHelpful(review_id);
@@ -46,7 +42,6 @@ module.exports = {
     }
   },
   putReport: async (req, res) => {
-    console.log('PUT report');
     const { review_id } = req.params;
     try {
       await models.putReport(review_id);

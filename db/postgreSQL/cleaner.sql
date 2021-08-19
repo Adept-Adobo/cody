@@ -55,3 +55,13 @@ COPY users(email, name) FROM '/Users/codyszeto/Documents/sdc/unique_users_cleane
 -- COPY charact FROM '/Users/codyszeto/Downloads/characteristics.csv' WITH(FORMAT CSV, DELIMITER ',', HEADER);
 
 --COPY reviews(name, email) FROM '' WITH(FORMAT CSV, DELIMITER ',', HEADER);
+
+SELECT CURRVAL(PG_GET_SERIAL_SEQUENCE('"reviews"', 'id')) AS "Current Value", MAX("id") AS "Max Value" FROM "reviews";
+SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"reviews"', 'id')), (SELECT (MAX("id") + 1) FROM "reviews") + 1);
+
+--resync code
+--SELECT CURRVAL(PG_GET_SERIAL_SEQUENCE('"reviews"', 'id')) AS "Current Value", MAX("id") AS "Max Value" FROM "reviews";
+--SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"reviews"', 'id')), (SELECT (MAX("id") + 1) FROM "reviews") + 1);
+
+--SELECT CURRVAL(PG_GET_SERIAL_SEQUENCE('"photos"', 'id')) AS "Current Value", MAX("id") AS "Max Value" FROM "photos";
+--SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"photos"', 'id')), (SELECT (MAX("id") + 1) FROM "photos") + 1);

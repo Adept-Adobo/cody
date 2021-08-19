@@ -1,14 +1,16 @@
-DROP DATABASE IF EXISTS reviewsnew;
-CREATE DATABASE reviewsnew;
+DROP DATABASE IF EXISTS sdcreviews;
+CREATE DATABASE sdcreviews;
 
-\c reviewsnew;
+\c sdcreviews;
 
+DROP TABLE IF EXISTS users;
 CREATE TABLE users(
   id SERIAL PRIMARY KEY,
   email VARCHAR(50) NOT NULL,
   name VARCHAR(50) NOT NULL
 );
 
+DROP TABLE IF EXISTS reviews;
 CREATE TABLE reviews(
   id SERIAL PRIMARY KEY,
   product_id INTEGER NOT NULL,
@@ -23,12 +25,14 @@ CREATE TABLE reviews(
   reviewer_id INT NOT NULL
 );
 
+DROP TABLE IF EXISTS photos;
 CREATE TABLE photos(
   id SERIAL PRIMARY KEY,
   review_id INTEGER NOT NULL,
   url VARCHAR(200) NOT NULL
 );
 
+DROP TABLE IF EXISTS characteristics;
 CREATE TABLE characteristics(
   id SERIAL PRIMARY KEY,
   name VARCHAR(30) NOT NULL,
@@ -45,21 +49,31 @@ ALTER TABLE reviews ADD FOREIGN KEY (reviewer_id) REFERENCES users (id);
 ALTER TABLE photos ADD FOREIGN KEY (review_id) REFERENCES reviews (id);
 ALTER TABLE characteristics ADD FOREIGN KEY (review_id) REFERENCES reviews (id);
 
--- DROP INDEX IF EXISTS reviews_idx;
+DROP INDEX IF EXISTS reviews_idx;
 CREATE INDEX reviews_idx ON reviews (id);
+
+DROP INDEX IF EXISTS reviews_product_idx;
 CREATE INDEX reviews_product_idx ON reviews(product_id);
 
--- DROP INDEX IF EXISTS char_idx;
+DROP INDEX IF EXISTS char_idx;
 CREATE INDEX char_idx ON characteristics (id);
+
+DROP INDEX IF EXISTS char_review_idx;
 CREATE INDEX char_review_idx ON characteristics(review_id);
 
--- DROP INDEX IF EXISTS photos_idx;
+DROP INDEX IF EXISTS photos_idx;
 CREATE INDEX photos_idx ON photos (id);
+
+DROP INDEX IF EXISTS photos_review_idx;
 CREATE INDEX photos_review_idx ON photos(review_id);
 
--- DROP INDEX IF EXISTS users_idx;
+DROP INDEX IF EXISTS users_idx;
 CREATE INDEX users_idx ON users (id);
+
+DROP INDEX IF EXISTS users_name_idx;
 CREATE INDEX users_name_idx ON users (name);
+
+DROP INDEX IF EXISTS users_email_idx;
 CREATE INDEX users_email_idx ON users (email);
 
 

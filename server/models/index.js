@@ -29,31 +29,42 @@ module.exports = {
         let review_id = await db.query(`INSERT INTO reviews(${reviewColumns}) VALUES(${reviewValues}) RETURNING id;`);
         // insert photos to db if exists
         if (photos.length > 0) {
-          let query = [];
-          for (let photo of photos) {
-            query.push(`(${review_id.rows[0]['id']}, '${photo}')`);
+          let formattedQuery;
+          if (Array.isArray(photos)) {
+            let query = [];
+            for (let photo of photos) {
+              query.push(`(${review_id.rows[0]['id']}, '${photo}')`);
+            }
+            formattedQuery = query.join(',');
+          } else if (typeof photos === 'string') {
+            formattedQuery = `(${review_id.rows[0]['id']}, '${photos}')`;
           }
           try {
-            let formattedQuery = query.join(',');
             await db.query(`INSERT INTO photos(review_id, url) VALUES ${formattedQuery};`);
-          } catch(e) {console.log('Error posting image URLs');}
+          } catch(e) {console.log('error message: ', e); return 'Error posting image URLs';}
         }
         // insert characteristics to db if exists
-        if (Object.keys(characteristics).length > 0) {
+        let chars;
+        if (typeof characteristics === 'string') {
+          chars = JSON.parse(characteristics);
+        } else {
+          chars = characteristics;
+        }
+        if (Object.keys(chars).length > 0) {
           let query = [];
-          for (let char in characteristics) {
-            query.push(`('${char}', ${review_id.rows[0]['id']}, ${characteristics[char]})`);
+          for (let char in chars) {
+            query.push(`('${char}', ${review_id.rows[0]['id']}, ${chars[char]})`);
           }
           try {
             let formattedQuery = query.join(',');
             await db.query(`INSERT INTO characteristics(name, review_id, value) VALUES ${formattedQuery};`);
-          } catch(e) {console.log('ERROR POSTING CHARACTERISTICS');}
+          } catch(e) {return 'ERROR POSTING CHARACTERISTICS';}
         }
       } catch(e) {
-        console.log('POST body improper format');
+        return 'POST body improper format';
       }
     } catch(e) {
-      console.log('failed post');
+      return 'failed post';
     }
   },
   getMeta: async (product_id) => {

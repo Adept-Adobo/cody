@@ -19,8 +19,8 @@ module.exports = {
   post: async (req, res) => {
     console.log('POST review');
     try {
-      await models.post(req.body);
-      res.status(201).send('Review posted');
+      const data = await models.post(req.body);
+      typeof data === 'string' ? res.status(400).send(data) : res.status(201).send('Review posted');
     } catch(e) {
       res.status(500).send('ERROR POSTING REVIEW');
     }

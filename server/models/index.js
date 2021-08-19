@@ -37,7 +37,8 @@ module.exports = {
             }
             formattedQuery = query.join(',');
           } else if (typeof photos === 'string') {
-            formattedQuery = `(${review_id.rows[0]['id']}, '${photos}')`;
+            let parsedPhoto = JSON.parse(photos);
+            formattedQuery = `(${review_id.rows[0]['id']}, '${parsedPhoto[0]}')`;
           }
           try {
             await db.query(`INSERT INTO photos(review_id, url) VALUES ${formattedQuery};`);

@@ -9,6 +9,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/', (req, res) => {
+  console.log('You have accessed the API');
+  res.send('welcome to my API');
+});
+
 app.use('/api', router);
 
 app.listen(port, () => {

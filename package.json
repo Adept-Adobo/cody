@@ -23,6 +23,7 @@
     "express-promise-router": "^4.1.0",
     "mongoose": "^5.13.6",
     "nodemon": "^2.0.12",
-    "pg": "^8.7.1"
+    "pg": "^8.7.1",
+    "mpath": ">=0.8.4"
   }
 }
